@@ -24,6 +24,8 @@ namespace Core.Repositories.Implementation
 
         public async Task DeletePerson(Person person)
         {
+            var result = await _context.Persons.SingleOrDefaultAsync(p => p.Id == person.Id);
+            if (result == null) return;
             _context.Persons.Remove(person);
             await _context.SaveChangesAsync();
         }
@@ -41,7 +43,7 @@ namespace Core.Repositories.Implementation
 
         public async Task UpdatePerson(Guid oldPersonID, Person newPerson)
         {
-            var result = _context.Persons.SingleOrDefault(p => p.Id == oldPersonID);
+            var result = await _context.Persons.SingleOrDefaultAsync(p => p.Id == oldPersonID);
             if (result == null) return;
             result.Name = newPerson.Name;
             result.FirstName = newPerson.FirstName;
